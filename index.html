@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:#fff;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:"Comic Sans MS", cursive;
+}
+
+.card{
+  text-align:center;
+  z-index:10;
+}
+
+.bear{
+  width:140px;
+  animation:dance 1s infinite alternate;
+}
+
+@keyframes dance{
+  from{transform:translateY(0) rotate(-3deg);}
+  to{transform:translateY(-10px) rotate(3deg);}
+}
+
+h1{margin:20px 0;}
+
+button{
+  padding:12px 22px;
+  font-size:16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .3s ease;
+}
+
+#yes{background:#4caf50;color:#fff;}
+#no{background:#e53935;color:#fff;margin-left:10px;}
+.hidden{display:none;}
+
+/* PNG floating hearts */
+.heart{
+  position:absolute;
+  bottom:-40px;
+  width:30px;
+  animation:floatUp linear infinite;
+  opacity:.8;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(0) rotate(0deg);}
+  to{transform:translateY(-110vh) rotate(360deg);}
+}
+
+/* Balloons & roses pop */
+.pop{
+  position:absolute;
+  width:50px;
+  animation:pop 2s ease-out forwards;
+}
+
+@keyframes pop{
+  from{transform:scale(0);opacity:1;}
+  to{transform:scale(1.6) translateY(-120px);opacity:0;}
+}
+
+.kiss{
+  animation:kiss .3s ease-in-out 2;
+}
+
+@keyframes kiss{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.15);}
+  100%{transform:scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <img id="bear" class="bear"
+    src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+
+  <h1 id="text">DEVANJANA, will you be my Valentine? 💖</h1>
+
+  <div id="buttons">
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+  </div>
+</div>
+
+<audio id="yesSound">
+  <source src="https://www.soundjay.com/human/kiss-2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const yesBtn=document.getElementById("yes");
+const noBtn=document.getElementById("no");
+const text=document.getElementById("text");
+const bear=document.getElementById("bear");
+const sound=document.getElementById("yesSound");
+
+let yesScale=1,noScale=1;
+const noTexts=[
+  "Are you sure?",
+  "Seriously?",
+  "For real?",
+  "Think again 😢",
+  "Don't do this",
+  "Last chance!"
+];
+let i=0;
+
+/* NO logic */
+noBtn.onclick=()=>{
+  yesScale+=0.2;
+  noScale-=0.08;
+  yesBtn.style.transform=`scale(${yesScale})`;
+  noBtn.style.transform=`scale(${Math.max(noScale,.4)})`;
+  noBtn.textContent=noTexts[i%noTexts.length];
+  i++;
+};
+
+/* YES logic */
+yesBtn.onclick=()=>{
+  text.textContent="Ok yay!!! 💖";
+  document.getElementById("buttons").classList.add("hidden");
+  bear.src="https://media.giphy.com/media/l4FGI8GoTL7N4DsyI/giphy.gif";
+  bear.classList.add("kiss");
+  sound.play();
+  celebration();
+};
+
+/* Floating PNG hearts */
+setInterval(()=>{
+  const h=document.createElement("img");
+  h.src="https://i.imgur.com/Qp3Z9vH.png"; // heart PNG
+  h.className="heart";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=4+Math.random()*4+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),8000);
+},600);
+
+/* Balloons + roses PNG burst */
+function celebration(){
+  const imgs=[
+    "https://i.imgur.com/7Qb7ZkF.png", // balloon
+    "https://i.imgur.com/7Qb7ZkF.png",
+    "https://i.imgur.com/8Z7Z6bN.png", // rose
+    "https://i.imgur.com/8Z7Z6bN.png"
+  ];
+
+  for(let j=0;j<25;j++){ 
+    const p=document.createElement("img");
+    p.src=imgs[Math.floor(Math.random()*imgs.length)];
+    p.className="pop";
+    p.style.left=Math.random()*100+"vw";
+    p.style.top=Math.random()*100+"vh";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),2000);
+  }
+}
+</script>
+
+</body>
+</html>
